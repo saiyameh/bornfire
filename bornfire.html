@@ -1,0 +1,60 @@
+!
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Bornfire</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<style>
+    body {
+        background: #222;
+    }
+
+    svg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 100vh;
+        width: 100vw;
+    }
+</style>
+
+<body>
+    <script>
+        function bonfire() {
+            const randInt = (min, max) => {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            };
+            let paths = ``;
+            for (let i = 0; i < 200; i++) {
+                let randOff = randInt(-15, 15) / 10;
+                let d = `M ${randInt(35, 65) / 10} 10 
+                    Q ${5 - randOff} 7.5 5 ${randInt(35, 65) / 10} 
+                    Q ${5 + randOff} 2.5 ${randInt(35, 65) / 10} 0`;
+                let p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                p.setAttribute('d', d);
+                console.log(p.getTotalLength());
+                let len = p.getTotalLength();
+                let dur = randInt(10, 20) / 10;
+                let begin = randInt(0, 100) / 100;
+                paths += `<path d="${d}" fill="none" stroke-linecap="round" stroke-width="${randInt(4, 12) / 100}" opacity="${randInt(7, 10) / 10}" stroke="hsl(${i / 3},100%,50%)" stroke-dashoffset="${len}" stroke-dasharray="${len}">
+                    <animate attributeName="stroke-dashoffset" values="${p.getTotalLength()}; 0" repeatCount="indefinite" begin="${begin}s" dur="${dur}s" />
+                    <animate attributeName="opacity" values="1; ${randInt(0, 1)}; ${randInt(0, 5) / 10}; ${randInt(0, 5) / 10}; ${randInt(0, 5) / 10}; 0; 0" repeatCount="indefinite" begin="${begin}s" dur="${dur}s" />
+                    </path>`;
+            }
+
+            let svg = `<svg viewBox="0 0 10 10">
+                ${paths}
+                </svg>`;
+            console.log(svg);
+            document.body.innerHTML += svg;
+        }
+        bonfire();            
+    </script>
+</body>
+</html>
